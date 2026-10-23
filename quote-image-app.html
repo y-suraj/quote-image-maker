@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quote Image Maker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f4f5f7;
+            color: #1f2937;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            font-size: 26px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 14px 0 6px;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .color-row input[type="color"] {
+            width: 52px;
+            height: 38px;
+            padding: 0;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: none;
+        }
+
+        .swatches {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #d1d5db;
+            cursor: pointer;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: #fff;
+            margin-top: 18px;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .preview-box {
+            display: flex;
+            justify-content: center;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 540px;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            min-height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>Quote Image Maker</h1>
+
+        <div class="layout">
+            <div class="card">
+                <label for="quoteText">Quote</label>
+                <textarea id="quoteText" placeholder="Paste or type the quote here"></textarea>
+
+                <label for="authorName">Author name</label>
+                <input type="text" id="authorName" placeholder="Author name">
+
+                <label for="bookName">Book name</label>
+                <input type="text" id="bookName" placeholder="Book name">
+
+                <label for="textAlign">Text alignment</label>
+                <select id="textAlign">
+                    <option value="center" selected>Center</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+
+                <label for="quoteFont">Quote font</label>
+                <select id="quoteFont">
+                    <option value="Georgia, serif" selected>Georgia — Serif</option>
+                    <option value="'Times New Roman', serif">Times New Roman — Serif</option>
+                    <option value="'Playfair Display', Georgia, serif">Playfair Display — Elegant serif</option>
+                    <option value="system-ui, sans-serif">System — Modern sans-serif</option>
+                    <option value="Arial, sans-serif">Arial — Sans-serif</option>
+                    <option value="'Segoe UI', sans-serif">Segoe UI — Sans-serif</option>
+                    <option value="'Courier New', monospace">Courier New — Typewriter</option>
+                </select>
+
+                <label for="bgColor">Background color</label>
+                <div class="row color-row">
+                    <input type="color" id="bgColor" value="#111827">
+                    <input type="text" id="bgHex" value="#111827">
+                </div>
+
+                <div class="swatches">
+                    <div class="swatch" data-color="#111827" style="background:#111827"></div>
+                    <div class="swatch" data-color="#ffffff" style="background:#ffffff"></div>
+                    <div class="swatch" data-color="#f3f4f6" style="background:#f3f4f6"></div>
+                    <div class="swatch" data-color="#fef3c7" style="background:#fef3c7"></div>
+                    <div class="swatch" data-color="#dcfce7" style="background:#dcfce7"></div>
+                    <div class="swatch" data-color="#dbeafe" style="background:#dbeafe"></div>
+                    <div class="swatch" data-color="#ede9fe" style="background:#ede9fe"></div>
+                    <div class="swatch" data-color="#fee2e2" style="background:#fee2e2"></div>
+                    <div class="swatch" data-color="#0f766e" style="background:#0f766e"></div>
+                    <div class="swatch" data-color="#7c2d12" style="background:#7c2d12"></div>
+                </div>
+
+                <button class="primary" id="copyBtn">Copy image</button>
+                <button class="secondary" id="downloadBtn">Download PNG</button>
+                <div class="status" id="status"></div>
+                <div class="hint">
+                    The author name remains filled after you copy or download an image, so you can make several quotes
+                    by the same author without retyping it.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="preview-box">
+                    <canvas id="quoteCanvas" width="1080" height="1080"></canvas>
+                </div>
+                <div class="hint">Live preview — updates as you type.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("quoteCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const quoteText = document.getElementById("quoteText");
+        const authorName = document.getElementById("authorName");
+        const bookName = document.getElementById("bookName");
+        const bgColor = document.getElementById("bgColor");
+        const bgHex = document.getElementById("bgHex");
+        const statusEl = document.getElementById("status");
+        const textAlign = document.getElementById("textAlign");
+        const quoteFont = document.getElementById("quoteFont");
+
+        function wrapText(text, maxWidth) {
+            const paragraphs = text.split(/\n/);
+            const lines = [];
+
+            for (const paragraph of paragraphs) {
+                const words = paragraph.trim().split(/\s+/).filter(Boolean);
+
+                if (words.length === 0) {
+                    lines.push("");
+                    continue;
+                }
+
+                let line = "";
+
+                for (const word of words) {
+                    const testLine = line ? line + " " + word : word;
+
+                    if (ctx.measureText(testLine).width <= maxWidth) {
+                        line = testLine;
+                    } else {
+                        if (line) lines.push(line);
+
+                        // If one word is longer than the available width, break it.
+                        if (ctx.measureText(word).width > maxWidth) {
+                            let part = "";
+                            for (const ch of word) {
+                                if (ctx.measureText(part + ch).width <= maxWidth) {
+                                    part += ch;
+                                } else {
+                                    lines.push(part);
+                                    part = ch;
+                                }
+                            }
+                            line = part;
+                        } else {
+                            line = word;
+                        }
+                    }
+                }
+
+                if (line) lines.push(line);
+            }
+
+            return lines;
+        }
+
+        function getTextColor(background) {
+            const hex = background.replace("#", "");
+            const r = parseInt(hex.slice(0, 2), 16);
+            const g = parseInt(hex.slice(2, 4), 16);
+            const b = parseInt(hex.slice(4, 6), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness > 150 ? "#111827" : "#ffffff";
+        }
+
+        function drawQuote() {
+            const quote = quoteText.value.trim();
+            const author = authorName.value.trim();
+            const book = bookName.value.trim();
+            const background = bgColor.value;
+            const textColor = getTextColor(background);
+
+            const W = canvas.width;
+            const H = canvas.height;
+            const padding = 110;
+            const contentWidth = W - padding * 2;
+
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = background;
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.fillStyle = textColor;
+            const alignment = textAlign.value;
+            ctx.textAlign = alignment;
+            ctx.textBaseline = "top";
+
+            const quoteX =
+                alignment === "left"
+                    ? padding
+                    : alignment === "right"
+                        ? W - padding
+                        : W / 2;
+
+            // Attribution area
+            const attributionLines = [];
+            if (book) attributionLines.push(book);
+            if (author) attributionLines.push(author);
+
+            ctx.font = "600 34px Georgia, serif";
+            const attributionWrapped = attributionLines.flatMap(line =>
+                wrapText(line, contentWidth)
+            );
+            const attributionHeight = attributionWrapped.length * 46;
+
+            // Start with a large quote font, then reduce until it fits.
+            let fontSize = 72;
+            let quoteLines = [];
+
+            while (fontSize >= 28) {
+                ctx.font = `600 ${fontSize}px ${quoteFont.value}`;
+                quoteLines = wrapText(quote || "Your quote will appear here.", contentWidth);
+
+                const quoteHeight = quoteLines.length * fontSize * 1.28;
+                const totalHeight = quoteHeight + (attributionLines.length ? attributionHeight + 70 : 0);
+
+                if (totalHeight <= H - padding * 2) break;
+                fontSize -= 2;
+            }
+
+            ctx.font = `600 ${fontSize}px ${quoteFont.value}`;
+            const lineHeight = fontSize * 1.28;
+            const quoteHeight = quoteLines.length * lineHeight;
+            const attributionSpace = attributionLines.length ? attributionHeight + 70 : 0;
+            const totalHeight = quoteHeight + attributionSpace;
+
+            let y = (H - totalHeight) / 2;
+
+            ctx.fillStyle = textColor;
+            for (const line of quoteLines) {
+                ctx.fillText(line, quoteX, y);
+                y += lineHeight;
+            }
+
+            if (attributionLines.length) {
+                y += 40;
+
+                ctx.font = "500 32px system-ui, sans-serif";
+                ctx.globalAlpha = 0.82;
+
+                for (const line of attributionWrapped) {
+                    ctx.fillText(line, quoteX, y);
+                    y += 46;
+                }
+
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        async function copyImage() {
+            statusEl.textContent = "";
+            drawQuote();
+
+            try {
+                const blob = await new Promise(resolve =>
+                    canvas.toBlob(resolve, "image/png")
+                );
+
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        "image/png": blob
+                    })
+                ]);
+
+                statusEl.style.color = "#16a34a";
+                statusEl.textContent = "Image copied to clipboard.";
+            } catch (err) {
+                statusEl.style.color = "#dc2626";
+                statusEl.textContent =
+                    "Could not copy. Use Download PNG, or paste into an app that accepts images.";
+            }
+        }
+
+        function downloadImage() {
+            drawQuote();
+
+            const link = document.createElement("a");
+            link.download = "quote-image.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+
+            statusEl.style.color = "#16a34a";
+            statusEl.textContent = "PNG downloaded.";
+        }
+
+        quoteText.addEventListener("input", drawQuote);
+        authorName.addEventListener("input", drawQuote);
+        bookName.addEventListener("input", drawQuote);
+        textAlign.addEventListener("change", drawQuote);
+        quoteFont.addEventListener("change", drawQuote);
+        bgColor.addEventListener("input", () => {
+            bgHex.value = bgColor.value.toUpperCase();
+            drawQuote();
+        });
+
+        bgHex.addEventListener("input", () => {
+            const value = bgHex.value.trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(value)) {
+                bgColor.value = value.toLowerCase();
+                drawQuote();
+            }
+        });
+
+        document.querySelectorAll(".swatch").forEach(swatch => {
+            swatch.addEventListener("click", () => {
+                const color = swatch.dataset.color;
+                bgColor.value = color;
+                bgHex.value = color.toUpperCase();
+                drawQuote();
+            });
+        });
+
+        document.getElementById("copyBtn").addEventListener("click", copyImage);
+        document.getElementById("downloadBtn").addEventListener("click", downloadImage);
+
+        drawQuote();
+    </script>
+</body>
+
+</html>
