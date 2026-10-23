@@ -194,6 +194,15 @@
                     <option value="'Segoe UI', sans-serif">Segoe UI — Sans-serif</option>
                     <option value="'Courier New', monospace">Courier New — Typewriter</option>
                 </select>
+                <label for="quoteWeight">Font weight</label>
+                <select id="quoteWeight">
+                    <option value="400">Regular</option>
+                    <option value="500">Medium</option>
+                    <option value="600" selected>Semi-bold</option>
+                    <option value="700">Bold</option>
+                    <option value="800">Extra bold</option>
+                    <option value="900">Black</option>
+                </select>
 
                 <label for="bgColor">Background color</label>
                 <div class="row color-row">
@@ -244,6 +253,7 @@
         const statusEl = document.getElementById("status");
         const textAlign = document.getElementById("textAlign");
         const quoteFont = document.getElementById("quoteFont");
+        const quoteWeight = document.getElementById("quoteWeight");
 
         function wrapText(text, maxWidth) {
             const paragraphs = text.split(/\n/);
@@ -344,7 +354,7 @@
             let quoteLines = [];
 
             while (fontSize >= 28) {
-                ctx.font = `600 ${fontSize}px ${quoteFont.value}`;
+                ctx.font = `${quoteWeight.value} ${fontSize}px ${quoteFont.value}`;
                 quoteLines = wrapText(quote || "Your quote will appear here.", contentWidth);
 
                 const quoteHeight = quoteLines.length * fontSize * 1.28;
@@ -354,7 +364,7 @@
                 fontSize -= 2;
             }
 
-            ctx.font = `600 ${fontSize}px ${quoteFont.value}`;
+            ctx.font = `${quoteWeight.value} ${fontSize}px ${quoteFont.value}`;
             const lineHeight = fontSize * 1.28;
             const quoteHeight = quoteLines.length * lineHeight;
             const attributionSpace = attributionLines.length ? attributionHeight + 70 : 0;
@@ -424,6 +434,7 @@
         bookName.addEventListener("input", drawQuote);
         textAlign.addEventListener("change", drawQuote);
         quoteFont.addEventListener("change", drawQuote);
+        quoteWeight.addEventListener("change", drawQuote);
         bgColor.addEventListener("input", () => {
             bgHex.value = bgColor.value.toUpperCase();
             drawQuote();
